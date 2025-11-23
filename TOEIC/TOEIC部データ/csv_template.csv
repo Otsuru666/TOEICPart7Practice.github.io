@@ -1,0 +1,6 @@
+session_date,session_number,facilitator,problem_file,question_number,question_type,member_id,member_name,answer,is_correct,time_spent_seconds,notes
+2025-11-06,1,nakato,125-129.md,125,detail,member_001,nakato,A,1,45,
+2025-11-06,1,nakato,125-129.md,126,inference,member_001,nakato,B,0,60,推論問題で間違えた
+2025-11-06,1,nakato,125-129.md,125,detail,member_002,メンバー2,A,1,55,
+2025-11-06,1,nakato,125-129.md,126,inference,member_002,メンバー2,C,0,70,選択肢Cを選んだ
+

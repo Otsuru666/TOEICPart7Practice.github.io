@@ -1,0 +1,36 @@
+# TOEIC部メンバー情報
+
+members:
+  - id: "member_001"
+    name: "浜脇"
+    target_score: 800
+    current_level: "上級"
+    joined_date: "2025-01-01"
+    notes: "メンバーの中で一番成績が良い"
+    
+  - id: "member_002"
+    name: "中津留"
+    target_score: 600
+    current_level: "初級"
+    joined_date: "2025-01-01"
+    notes: "300-400点レベル"
+    
+  - id: "member_003"
+    name: "龍生"
+    target_score: 600
+    current_level: "初級"
+    joined_date: "2025-01-01"
+    notes: "300-400点レベル"
+
+# レベル定義
+level_definition:
+  初級: "300-500点レベル。基礎的な文法と語彙を学習中"
+  中級: "500-700点レベル。ビジネス英語の基礎を習得"
+  上級: "700-900点レベル。高度な読解力と語彙力"
+
+# 難易度マッピング
+difficulty_mapping:
+  初級: "初級"
+  中級: "中級"
+  上級: "上級"
+
