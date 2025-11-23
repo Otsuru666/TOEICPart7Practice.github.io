@@ -1,0 +1,154 @@
+{
+    "passage": {
+        "title": "Invoice #INV-2023-001",
+        "meta": [
+            {
+                "label": "Invoice Date",
+                "value": "October 15, 2023"
+            },
+            {
+                "label": "Due Date",
+                "value": "November 14, 2023"
+            },
+            {
+                "label": "To",
+                "value": "Global Tech Solutions Inc."
+            },
+            {
+                "label": "From",
+                "value": "Creative Design Studio"
+            }
+        ],
+        "content": [
+            {
+                "type": "paragraph",
+                "text": "Dear Global Tech Solutions Team,\n\nPlease find attached the invoice for the web design services provided during the month of September. We appreciate your business and look forward to continuing our partnership."
+            },
+            {
+                "type": "table",
+                "headers": [
+                    "Description",
+                    "Hours",
+                    "Rate",
+                    "Amount"
+                ],
+                "rows": [
+                    [
+                        "Website Redesign - Homepage",
+                        "20",
+                        "$100.00",
+                        "$2,000.00"
+                    ],
+                    [
+                        "Mobile Responsiveness Optimization",
+                        "10",
+                        "$100.00",
+                        "$1,000.00"
+                    ],
+                    [
+                        "SEO Audit and Implementation",
+                        "5",
+                        "$120.00",
+                        "$600.00"
+                    ]
+                ]
+            },
+            {
+                "type": "kv-list",
+                "items": [
+                    {
+                        "label": "Subtotal",
+                        "value": "$3,600.00"
+                    },
+                    {
+                        "label": "Tax (10%)",
+                        "value": "$360.00"
+                    },
+                    {
+                        "label": "Total Due",
+                        "value": "$3,960.00",
+                        "highlight": true
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "text": "Payment methods accepted: Bank Transfer, Credit Card, or Check.\nPlease include the invoice number in your payment reference."
+            }
+        ]
+    },
+    "questions": [
+        {
+            "id": 1,
+            "text": "What is the purpose of this document?",
+            "correct": "B",
+            "explanation": "この文書は 'Invoice'（請求書）というタイトルがあり、サービス内容と金額が記載されているため、支払いを請求するためのものです。",
+            "options": [
+                {
+                    "id": "A",
+                    "text": "To propose a new project"
+                },
+                {
+                    "id": "B",
+                    "text": "To request payment for services"
+                },
+                {
+                    "id": "C",
+                    "text": "To schedule a meeting"
+                },
+                {
+                    "id": "D",
+                    "text": "To complain about a service"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "text": "When is the payment deadline?",
+            "correct": "C",
+            "explanation": "上部のメタデータに 'Due Date: November 14, 2023'（支払期日：2023年11月14日）と記載されています。",
+            "options": [
+                {
+                    "id": "A",
+                    "text": "October 15"
+                },
+                {
+                    "id": "B",
+                    "text": "October 31"
+                },
+                {
+                    "id": "C",
+                    "text": "November 14"
+                },
+                {
+                    "id": "D",
+                    "text": "November 30"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "text": "Which service had the highest hourly rate?",
+            "correct": "C",
+            "explanation": "表の 'Rate' 列を見ると、Website RedesignとMobile Optimizationは$100.00ですが、SEO Auditは$120.00で最も高いレートです。",
+            "options": [
+                {
+                    "id": "A",
+                    "text": "Website Redesign"
+                },
+                {
+                    "id": "B",
+                    "text": "Mobile Responsiveness Optimization"
+                },
+                {
+                    "id": "C",
+                    "text": "SEO Audit and Implementation"
+                },
+                {
+                    "id": "D",
+                    "text": "All rates are the same"
+                }
+            ]
+        }
+    ]
+}
