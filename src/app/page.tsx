@@ -1,178 +1,121 @@
-"use client";
+import fs from 'fs';
+import path from 'path';
+import Link from 'next/link';
+import { BookOpen, Clock, ChevronRight, Zap, Archive } from 'lucide-react';
 
-import { useState } from "react";
+async function getLatestProblem() {
+  const problemsDir = path.join(process.cwd(), 'TOEIC', '問題');
+  if (!fs.existsSync(problemsDir)) {
+    return null;
+  }
+  const files = fs.readdirSync(problemsDir)
+    .filter(file => file.endsWith('.json'))
+    .map(file => {
+      const filePath = path.join(problemsDir, file);
+      const stats = fs.statSync(filePath);
+      return { file, mtime: stats.mtime };
+    })
+    .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 
-interface QuizData {
-  question: string;
-  options: string[];
-  answer: string;
-  explanation: string;
+  if (files.length === 0) return null;
+  return files[0].file.replace('.json', '');
 }
 
-export default function Home() {
-  const [quiz, setQuiz] = useState<QuizData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [showResult, setShowResult] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchQuiz = async () => {
-    setLoading(true);
-    setError(null);
-    setQuiz(null);
-    setSelectedAnswer(null);
-    setShowResult(false);
-
-    try {
-      const res = await fetch("/api/quiz", { method: "POST" });
-      if (!res.ok) {
-        throw new Error("Failed to fetch quiz");
-      }
-      const data = await res.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      setQuiz(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOptionClick = (option: string) => {
-    if (showResult) return;
-    setSelectedAnswer(option);
-    setShowResult(true);
-  };
+export default async function Dashboard() {
+  const latestProblemId = await getLatestProblem();
 
   return (
-    <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 font-sans text-slate-800">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-
-        {/* Header */}
-        <div className="bg-blue-600 p-6 text-center">
-          <h1 className="text-3xl font-bold text-white tracking-tight">TOEIC Part 5 Practice</h1>
-          <p className="text-blue-100 mt-2">Grammar & Vocabulary Challenge</p>
+    <main className="min-h-screen bg-slate-50 font-sans text-slate-800">
+      {/* Hero Section */}
+      <div className="bg-indigo-600 text-white pt-16 pb-24 px-6 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+            TOEIC Practice Club
+          </h1>
+          <p className="text-indigo-100 text-lg md:text-xl max-w-2xl">
+            Daily practice for continuous improvement. Solve today's challenge together.
+          </p>
         </div>
 
-        <div className="p-8">
-          {/* Initial State / Generate Button */}
-          {!quiz && !loading && !error && (
-            <div className="text-center py-10">
-              <p className="text-lg text-slate-600 mb-8">
-                Ready to test your skills? Generate a new AI-powered question.
-              </p>
-              <button
-                onClick={fetchQuiz}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-blue-200 transform hover:-translate-y-1"
-              >
-                Generate Question
-              </button>
-            </div>
-          )}
+        {/* Decorative Circles */}
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-500 rounded-full opacity-50 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-indigo-700 rounded-full opacity-50 blur-3xl"></div>
+      </div>
 
-          {/* Loading State */}
-          {loading && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-              <p className="text-slate-500 animate-pulse">Generating question...</p>
-            </div>
-          )}
+      <div className="max-w-4xl mx-auto px-6 -mt-16 relative z-20 space-y-8 pb-16">
 
-          {/* Error State */}
-          {error && (
-            <div className="text-center py-8">
-              <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 border border-red-100">
-                {error}
-              </div>
-              <button
-                onClick={fetchQuiz}
-                className="text-blue-600 hover:text-blue-800 font-medium hover:underline"
-              >
-                Try Again
-              </button>
-            </div>
-          )}
+        {/* Today's Problem Card */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <Clock className="text-indigo-600" size={24} />
+              Today's Problem
+            </h2>
+            <span className="text-sm font-medium text-slate-500 bg-white px-3 py-1 rounded-full shadow-sm">
+              {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+            </span>
+          </div>
 
-          {/* Quiz Display */}
-          {quiz && !loading && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-
-              {/* Question */}
-              <div className="bg-slate-50 p-6 rounded-xl border-l-4 border-blue-500">
-                <h2 className="text-xl font-medium leading-relaxed text-slate-800">
-                  {quiz.question}
-                </h2>
-              </div>
-
-              {/* Options */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {quiz.options.map((option, index) => {
-                  let buttonClass = "p-4 rounded-xl border-2 text-left transition-all duration-200 font-medium ";
-
-                  if (showResult) {
-                    if (option === quiz.answer) {
-                      buttonClass += "bg-green-50 border-green-500 text-green-700";
-                    } else if (option === selectedAnswer) {
-                      buttonClass += "bg-red-50 border-red-500 text-red-700";
-                    } else {
-                      buttonClass += "bg-white border-slate-200 text-slate-400 opacity-60";
-                    }
-                  } else {
-                    buttonClass += "bg-white border-slate-200 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md cursor-pointer text-slate-700";
-                  }
-
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => handleOptionClick(option)}
-                      disabled={showResult}
-                      className={buttonClass}
-                    >
-                      <span className="inline-block w-6 h-6 rounded-full bg-slate-100 text-slate-500 text-xs flex items-center justify-center mr-3 border border-slate-200">
-                        {String.fromCharCode(65 + index)}
-                      </span>
-                      {option}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Result & Explanation */}
-              {showResult && (
-                <div className="mt-8 pt-6 border-t border-slate-100 animate-in fade-in duration-500">
-                  <div className={`text-center mb-6 ${selectedAnswer === quiz.answer ? "text-green-600" : "text-red-500"}`}>
-                    <span className="text-2xl font-bold">
-                      {selectedAnswer === quiz.answer ? "Correct! 🎉" : "Incorrect"}
-                    </span>
+          {latestProblemId ? (
+            <Link
+              href={`/part7/${latestProblemId}`}
+              className="block bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-indigo-200 transition-all duration-300 group"
+            >
+              <div className="p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-3">
+                    Part 7 • Reading
                   </div>
-
-                  <div className="bg-blue-50 p-6 rounded-xl">
-                    <h3 className="text-sm font-bold text-blue-800 uppercase tracking-wider mb-2">Explanation</h3>
-                    <p className="text-slate-700 leading-relaxed">
-                      {quiz.explanation}
-                    </p>
-                  </div>
-
-                  <div className="mt-8 text-center">
-                    <button
-                      onClick={fetchQuiz}
-                      className="bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-lg"
-                    >
-                      Next Question
-                    </button>
-                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                    {latestProblemId}
+                  </h3>
+                  <p className="text-slate-500">
+                    Challenge yourself with the latest reading comprehension problem.
+                  </p>
                 </div>
-              )}
+                <div className="flex-shrink-0 bg-indigo-600 text-white p-4 rounded-full shadow-lg group-hover:bg-indigo-700 group-hover:scale-110 transition-all duration-300">
+                  <ChevronRight size={32} />
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center">
+              <p className="text-slate-500">No problems available yet.</p>
             </div>
           )}
-        </div>
+        </section>
 
-        {/* Footer */}
-        <div className="bg-slate-50 p-4 text-center text-xs text-slate-400 border-t border-slate-100">
-          Powered by Google Gemini
-        </div>
+        {/* Quick Links Grid */}
+        <section className="grid md:grid-cols-2 gap-6">
+          {/* Part 5 Card */}
+          <Link
+            href="/part5"
+            className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all group"
+          >
+            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Zap size={24} />
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 mb-2">Part 5 Practice</h3>
+            <p className="text-slate-500 text-sm">
+              Quick grammar and vocabulary quizzes generated by AI.
+            </p>
+          </Link>
+
+          {/* Archive Card */}
+          <Link
+            href="/part7"
+            className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:border-emerald-300 transition-all group"
+          >
+            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Archive size={24} />
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 mb-2">Past Problems</h3>
+            <p className="text-slate-500 text-sm">
+              Access the full archive of previous Part 7 reading problems.
+            </p>
+          </Link>
+        </section>
+
       </div>
     </main>
   );

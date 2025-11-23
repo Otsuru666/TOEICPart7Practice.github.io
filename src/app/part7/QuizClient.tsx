@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { BookOpen, HelpCircle, CheckCircle, XCircle, Award } from 'lucide-react';
+import Link from 'next/link';
+import { BookOpen, HelpCircle, CheckCircle, XCircle, Award, ArrowLeft } from 'lucide-react';
 
 // Define types for our data structure
 interface MetaItem {
@@ -151,10 +152,15 @@ export default function QuizClient({ initialData }: QuizClientProps) {
 
             {/* Header */}
             <header className="flex-none h-16 bg-white border-b border-gray-200 flex items-center px-4 md:px-8 shadow-sm z-10 justify-between">
-                <h1 className="text-xl font-bold text-indigo-600 flex items-center gap-2">
-                    <BookOpen size={24} />
-                    <span>TOEIC Part 7 Practice</span>
-                </h1>
+                <div className="flex items-center gap-4">
+                    <Link href="/" className="text-gray-400 hover:text-indigo-600 transition-colors">
+                        <ArrowLeft size={24} />
+                    </Link>
+                    <h1 className="text-xl font-bold text-indigo-600 flex items-center gap-2">
+                        <BookOpen size={24} />
+                        <span>TOEIC Part 7 Practice</span>
+                    </h1>
+                </div>
 
                 <div className="flex items-center gap-4">
                     {isChecked && (
